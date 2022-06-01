@@ -20,17 +20,12 @@ Esse comando foi feito na pasta principal, anterior à src.
 catkin build
 ```
 
+Foi utilizado três terminais para poder enviar os comandos, que serão indicados por 1), 2) e 3).
 
-<h3>Inicializando o master</h3>
+<h3>1)Inicializando o master</h3>
 
 ```
 roscore
-```
-
-<h3>Definindo o robô que será utilizado</h3>
-
-```
-export TURTLEBOT3_MODEL=burger
 ```
 
 <h3>Buildando e setando variáveis</h3>
@@ -40,7 +35,14 @@ source devel/setup.bash
 catkin build
 ```
 
-<h3>Mapa Gazebo</h3>
+<h3>Definindo o robô que será utilizado</h3>
+
+```
+export TURTLEBOT3_MODEL=burger
+```
+
+
+<h3>2) Mapa Gazebo</h3>
 
 O mapa foi criado utilizando alguns obstáculos, conforme imagem abaixo. 
 
