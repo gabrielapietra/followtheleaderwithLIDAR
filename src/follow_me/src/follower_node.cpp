@@ -31,8 +31,15 @@ private:
   // control
   ros::Publisher FollowerControl_;
 
+  //lidar
+    std::vector<float> buffer_lidar_;
+    std::vector<float> lidar_diff_;
+    bool is_init_lidar = true;
+
 public:
-  Follow(ros::NodeHandle nh) {
+  Follow(ros::NodeHandle nh) :
+    buffer_lidar_(LIDAR_SAMPLES, 0), lidar_diff_(LIDAR_SAMPLES, 0) 
+  {
     masterGetPose_ =
         nh.subscribe("tb3_0/scan", 100, &Follow::getMasterPose, this);
     followerGetPose_ =
@@ -51,8 +58,8 @@ public:
 
     for (size_t i = 0; i < LIDAR_SAMPLES; i++) {
       lidar_diff_[i] = pow(sensor[i] - buffer_lidar_[i], 2);
-      if(diff[i] > 0)
-      {
+        if(lidar_diff_[i] > 10)
+        {
             indice = i;
         }
     }
@@ -69,8 +76,8 @@ public:
     //
     // your code here
     //
-    masterPose_.x = sqrt(diff[indice]) * cos(indice);
-    masterPose_.y = sqrt(diff[indice]) * sin(indice);
+    masterPose_.x = sqrt(lidar_diff_[indice]) * cos(indice);
+    masterPose_.y = sqrt(lidar_diff_[indice]) * sin(indice);
 
 #ifdef USE_MATPLOT
       std::vector<double> theta = linspace(0, 2 * pi, LIDAR_SAMPLES);
