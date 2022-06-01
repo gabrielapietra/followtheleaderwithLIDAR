@@ -46,6 +46,8 @@ export TURTLEBOT3_MODEL=burger
 
 O mapa foi criado utilizando alguns obstáculos, conforme imagem abaixo. 
 
+<img>https://github.com/gabrielapietra/followtheleaderwithLIDAR/blob/master/src/follow_me/world/mapa.png?raw=true</img>
+
 Ele pode ser encontrado pelo caminho <i>src/follow_me/world/new_world.world</i> e para executá-lo é necessário o comando:
 
 ```
