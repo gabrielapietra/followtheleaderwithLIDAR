@@ -41,6 +41,7 @@ public:
   }
 
   void getMasterPose(const sensor_msgs::LaserScan::ConstPtr msg) {
+    int indice;
     auto sensor = std::vector<float>(msg->ranges.size());
 
     // replace inf to LIDAR_MAX_RANGE
@@ -50,6 +51,10 @@ public:
 
     for (size_t i = 0; i < LIDAR_SAMPLES; i++) {
       lidar_diff_[i] = pow(sensor[i] - buffer_lidar_[i], 2);
+      if(diff[i] > 0)
+      {
+            indice = i;
+        }
     }
     // copy sensor to buffer
     std::copy(sensor.begin(), sensor.end(), buffer_lidar_.begin());
@@ -64,8 +69,8 @@ public:
     //
     // your code here
     //
-    masterPose_.x = 0;
-    masterPose_.y = 0;
+    masterPose_.x = sqrt(diff[indice]) * cos(indice);
+    masterPose_.y = sqrt(diff[indice]) * sin(indice);
 
 #ifdef USE_MATPLOT
       std::vector<double> theta = linspace(0, 2 * pi, LIDAR_SAMPLES);
