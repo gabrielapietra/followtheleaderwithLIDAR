@@ -13,7 +13,7 @@ $ git clone https://github.com/ROBOTIS-GIT/turtlebot3.git
 $ git clone https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
 ```
 
-<h3>Compilando</h3>
+<h3>:toolbox: Compilando</h3>
 
 Esse comando foi feito na pasta principal, anterior à src.
 ```
