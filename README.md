@@ -20,7 +20,7 @@ Esse comando foi feito na pasta principal, anterior à src.
 catkin build
 ```
 
-Foi utilizado três terminais para poder enviar os comandos, que serão indicados por 1), 2) e 3).
+<br><br>Foi utilizado três terminais para poder enviar os comandos, que serão indicados por 1), 2) e 3).
 
 <h3>1)Inicializando o master</h3>
 
