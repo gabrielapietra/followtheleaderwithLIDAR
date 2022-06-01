@@ -1,7 +1,44 @@
 <h2 align="center"> Follow the leader </h2>
 
-O projeto consiste no desafio de "Seguir o mestre", onde um dos robô é considerado o mestre, sendo controlado pelo teleop, e o outro robô deverá seguí-lo 
-no mapa que possui obstáculos. A maneira como o seguidor identifica o mestre é pelo sensor LIDAR.
+O projeto consiste no desafio de <i>Follow the Leader</i>, onde um dos robô é considerado o mestre, sendo controlado pelo <i>eleop</i>, e o outro robô deverá seguí-lo 
+no mapa que possui obstáculos. A maneira como o mestre identifica os objetos que estão no mapa é pelo sensor LIDAR, o outro robô irá seguí-lo por conta da biblioteca que possui a técnica de Odometria.
+_________________________________________________________________________________________________________________
+
+<h3>Configurações iniciais </h3>
+
+Foi utilizado o turtlebot3, de modo que foi usado os seguintes recursos dele, inseridos na pasta src:
+```
+$ git clone https://github.com/ROBOTIS-GIT/turtlebot3_msgs.git
+$ git clone https://github.com/ROBOTIS-GIT/turtlebot3.git
+$ git clone https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
+```
+
+<h3>Compilando</h3>
+
+Esse comando foi feito na pasta principal, anterior à src.
+```
+catkin build
+```
+
+
+<h3>Inicializando o master</h3>
+
+```
+roscore
+```
+
+<h3>Definindo o robô que será utilizado</h3>
+
+```
+export TURTLEBOT3_MODEL=burger
+```
+
+<h3>Buildando e setando variáveis</h3>
+
+```
+source devel/setup.bash
+catkin build
+```
 
 <h3>Mapa Gazebo</h3>
 
