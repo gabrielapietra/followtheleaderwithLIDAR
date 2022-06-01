@@ -4,7 +4,7 @@ O projeto consiste no desafio de <i>Follow the Leader</i>, onde um dos robô é 
 no mapa que possui obstáculos. A maneira como o mestre identifica os objetos que estão no mapa é pelo sensor LIDAR, o outro robô irá seguí-lo por conta da biblioteca que possui a técnica de Odometria.
 _________________________________________________________________________________________________________________
 
-<h3>Configurações iniciais </h3>
+<h3> ::gear:: Configurações iniciais </h3>
 
 Foi utilizado o turtlebot3, de modo que foi usado os seguintes recursos dele, inseridos na pasta src:
 ```
