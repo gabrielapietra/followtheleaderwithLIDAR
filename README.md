@@ -13,16 +13,17 @@ $ git clone https://github.com/ROBOTIS-GIT/turtlebot3.git
 $ git clone https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
 ```
 
+Comandos feitos na pasta principal.
+
 <h3>:toolbox: Compilando</h3>
 
-Esse comando foi feito na pasta principal, anterior à src.
 ```
 catkin build
 ```
 
 <br><br>Foi utilizado três terminais para poder enviar os comandos, que serão indicados por 1), 2) e 3).
 
-<h3>1)Inicializando o master</h3>
+<h3>1) Inicializando o master</h3>
 
 ```
 roscore
@@ -48,8 +49,8 @@ O mapa foi criado utilizando alguns obstáculos, conforme imagem abaixo.
 
 <img src="src/follow_me/world/mapa.png" alt="Gazebo Map"/>
 
-Ele pode ser encontrado pelo caminho <i>src/follow_me/world/new_world.world</i> e para executá-lo é necessário o comando:
+Ele pode ser encontrado pelo caminho <i>src/follow_me/world/new_world.world</i> e para executá-lo foi declarado dentro do arquivo <i>two_tb3.launch</i>, da pasta <i>launch</i>, para que além do mapa, os dois turtlebot fossem inicilizados nas posições pré-determinadas.
 
 ```
-gazebo new_world.world
+roslaunch turtlebot3_gazebo two_tb3.launch
 ```
