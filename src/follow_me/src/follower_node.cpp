@@ -50,7 +50,7 @@ public:
   }
 
   void getMasterPose(const sensor_msgs::LaserScan::ConstPtr msg) {
-    int indice;
+    int indice = 0;
     auto sensor = std::vector<float>(msg->ranges.size());
 
     // replace inf to LIDAR_MAX_RANGE
@@ -61,7 +61,7 @@ public:
     for (size_t i = 0; i < LIDAR_SAMPLES; i++) {
         lidar_diff_[i] = sensor[i] - buffer_lidar_[i];
         
-        if(lidar_diff_[i] > 5)
+        if(lidar_diff_[i] > 10)
         {
             indice = i;
         }
@@ -70,7 +70,7 @@ public:
       if (!is_in_motion && save_sensor_buffer)
       {
       	std::copy(sensor.begin(), sensor.end(), buffer_lidar_.begin());
-	save_sensor_buffer = false;
+	    save_sensor_buffer = false;
 #ifdef SHOW_POSITION_LOGS
       ROS_INFO("[Follower] Save lidar buffer data!");
 #endif
@@ -86,11 +86,14 @@ public:
     //
     // your code here
     //
-    masterPose_.x = lidar_diff_[indice] * cos(indice);
-    masterPose_.y = lidar_diff_[indice] * sin(indice);
+    if(indice >= 0 && indice < LIDAR_SAMPLES) 
+    {
+        masterPose_.x = lidar_diff_[indice] * cos(indice);
+        masterPose_.y = lidar_diff_[indice] * sin(indice);
+    }
 
 #ifdef USE_MATPLOT
-      std::vector<double> theta = linspace(0, 2 * pi, LIDAR_SAMPLES);
+    std::vector<double> theta = linspace(0, 2 * pi, LIDAR_SAMPLES);
 	plot(theta, lidar_diff_);
 	ylim({-LIDAR_MAX_RANGE - 0.1, LIDAR_MAX_RANGE + 0.1});
 	xlim({0 , 2 * pi});
@@ -180,10 +183,9 @@ int main(int argc, char **argv) {
   Follow follow(nh);
   ros::Rate loop_rate(0.5);
 
-  while (ros::ok()) {
+  while (ros::ok()) 
+  {
     ros::spinOnce();
- //   follow.moveToTarget();
- //   loop_rate.sleep();
   }
   return 0;
 }
