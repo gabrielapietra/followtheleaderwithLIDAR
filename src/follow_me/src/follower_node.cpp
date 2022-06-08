@@ -34,7 +34,9 @@ private:
   //lidar
     std::vector<float> buffer_lidar_;
     std::vector<float> lidar_diff_;
-    bool is_init_lidar = true;
+    bool is_in_motion = false;
+    bool save_sensor_buffer = true;
+
 
 public:
   Follow(ros::NodeHandle nh) :
@@ -57,14 +59,22 @@ public:
         [](float it) { return (it > LIDAR_MAX_RANGE) ? LIDAR_MAX_RANGE : it; });
 
     for (size_t i = 0; i < LIDAR_SAMPLES; i++) {
-      lidar_diff_[i] = pow(sensor[i] - buffer_lidar_[i], 2);
-        if(lidar_diff_[i] > 10)
+        lidar_diff_[i] = sensor[i] - buffer_lidar_[i];
+        
+        if(lidar_diff_[i] > 5)
         {
             indice = i;
         }
     }
-    // copy sensor to buffer
-    std::copy(sensor.begin(), sensor.end(), buffer_lidar_.begin());
+    //copy sensor to buffer
+      if (!is_in_motion && save_sensor_buffer)
+      {
+      	std::copy(sensor.begin(), sensor.end(), buffer_lidar_.begin());
+	save_sensor_buffer = false;
+#ifdef SHOW_POSITION_LOGS
+      ROS_INFO("[Follower] Save lidar buffer data!");
+#endif
+      }
 
 #ifdef SHOW_SENSOR_LOGS
       ROS_INFO("lidar_diff_ Data:");
@@ -76,8 +86,8 @@ public:
     //
     // your code here
     //
-    masterPose_.x = sqrt(lidar_diff_[indice]) * cos(indice);
-    masterPose_.y = sqrt(lidar_diff_[indice]) * sin(indice);
+    masterPose_.x = lidar_diff_[indice] * cos(indice);
+    masterPose_.y = lidar_diff_[indice] * sin(indice);
 
 #ifdef USE_MATPLOT
       std::vector<double> theta = linspace(0, 2 * pi, LIDAR_SAMPLES);
