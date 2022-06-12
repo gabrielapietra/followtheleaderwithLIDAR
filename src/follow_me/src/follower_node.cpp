@@ -57,29 +57,22 @@ public:
         msg->ranges.begin(), msg->ranges.end(), sensor.begin(),
         [](float it) { return (it > LIDAR_MAX_RANGE) ? LIDAR_MAX_RANGE : it; });
 
-    /*for (size_t i = 0; i < LIDAR_SAMPLES; i++) {
-        lidar_diff_[i] = sensor[i] - buffer_lidar_[i];
-        
-        if(lidar_diff_[i] > 10)
-        {
-            indice = i;
-        }
-    }*/
-
-    int max_number = 0, indice_max_number = 0;
-    // max_number é o maior valor do vetor lidar_diff_ e indice_max_number é o indice do maior valor
-    // representando a posição em m e quantos graus está
-
+    int max_number = 0; // max_number é o maior valor do vetor lidar_diff_
+    int indice = 0; //indice_max_number é o indice do maior valor 
+    //representando (posição, graus)
+     
     for (size_t i = 0; i < LIDAR_SAMPLES; i++){
         lidar_diff_[i] = abs(lidar_diff_[i]);
-        if(lidar_diff_[i] > max_number){
+
+        if(lidar_diff_[i] > max_number)
+        {
             max_number = lidar_diff_[i];
-            indice_max_number = i;
+            indice = i;
         }
     }
 
-    int x = max_number * cos(indice_max_number * M_PI / 180);
-    int y = max_number * sin(indice_max_number * M_PI / 180);
+    int x = max_number * cos(indice * M_PI / 180);
+    int y = max_number * sin(indice * M_PI / 180);
 
     //copy sensor to buffer
       if (!is_in_motion && save_sensor_buffer)
@@ -101,9 +94,7 @@ public:
     //
     // your code here
     //
-   /* masterPose_.x = lidar_diff_[indice] * cos(indice);
-    masterPose_.y = lidar_diff_[indice] * sin(indice);
-    */
+
     masterPose_.x = x;
     masterPose_.y = y;
 
@@ -173,12 +164,12 @@ public:
                     (masterPose_.x - followerPose_.x));
     omega_t = k_pa * (theta_r - followerPose_.theta);
 
-    /*if (abs(omega_t) > maxAngVel) {
+    if (abs(omega_t) > maxAngVel) {
       if (omega_t < 0)
         omega_t = -maxAngVel;
       else
         omega_t = maxAngVel;
-    }*/
+    }
 
     command.angular.z = omega_t;
 
