@@ -15,12 +15,6 @@ $ git clone https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
 
 Comandos feitos na pasta principal.
 
-<h3>:toolbox: Compilando</h3>
-
-```
-catkin build
-```
-
 <br><br>Foi utilizado três terminais para poder enviar os comandos, que serão indicados por 1), 2) e 3).
 
 <h3>1) Inicializando o master</h3>
@@ -29,12 +23,13 @@ catkin build
 roscore
 ```
 
-<h3>Buildando e setando variáveis</h3>
+<h3>:toolbox: Buildando e setando variáveis</h3>
 
 ```
-source devel/setup.bash
 catkin build
+source devel/setup.bash
 ```
+Segundo comando deverá ser executado em outros terminais, conforme mensagem de erro.
 
 <h3>Definindo o robô que será utilizado</h3>
 
@@ -42,15 +37,30 @@ catkin build
 export TURTLEBOT3_MODEL=burger
 ```
 
-
 <h3>2) Mapa Gazebo</h3>
 
 O mapa foi criado utilizando alguns obstáculos, conforme imagem abaixo. 
 
-<img src="src/follow_me/world/mapa.png" alt="Gazebo Map"/>
+<img src="src/follow_me/world/mapa2.png" alt="Gazebo Map"/>
 
-Ele pode ser encontrado pelo caminho <i>src/follow_me/world/new_world.world</i> e para executá-lo foi declarado dentro do arquivo <i>two_tb3.launch</i>, da pasta <i>launch</i>, para que além do mapa, os dois turtlebot fossem inicilizados nas posições pré-determinadas.
+Ele pode ser encontrado pelo caminho <i>src/follow_me/world/challenge.world</i> e para executá-lo foi declarado dentro do arquivo <i>two_tb3.launch</i>, da pasta <i>launch</i>, para que além do mapa, os dois turtlebot fossem inicilizados nas posições pré-determinadas.
 
 ```
-roslaunch turtlebot3_gazebo two_tb3.launch
+roslaunch follow_node two_tb3.launch
+```
+
+
+<h3>3) Seguindo o mestre</h3>
+
+Para que o seguidor possa inicializar seguindo o mestre, de suas posições iniciais, o seguinte comando é usado:
+
+```
+rosrun follow_me follower_node
+```
+
+<h3>:video_game: 4) Controlando o mestre</h3>
+Pelo <i>teleop</i> é possível controlar o mestre pelo teclado.
+
+```
+rosrun turtlebot3_teleop turtlebot3_teleop_key
 ```
