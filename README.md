@@ -46,7 +46,7 @@ O mapa foi criado utilizando alguns obstáculos, conforme imagem abaixo.
 Ele pode ser encontrado pelo caminho <i>src/follow_me/world/challenge.world</i> e para executá-lo foi declarado dentro do arquivo <i>two_tb3.launch</i>, da pasta <i>launch</i>, para que além do mapa, os dois turtlebot fossem inicilizados nas posições pré-determinadas.
 
 ```
-roslaunch follow_node two_tb3.launch
+roslaunch follow_me two_tb3.launch
 ```
 
 
