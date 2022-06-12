@@ -4,8 +4,7 @@
 #include <ros/ros.h>
 #include <sensor_msgs/LaserScan.h>
 #include <tf/tf.h>
-double follower_t;
-double master_t;
+#include <math.h>
 
 #ifdef USE_MATPLOT
 #include <matplot/matplot.h>
@@ -58,14 +57,30 @@ public:
         msg->ranges.begin(), msg->ranges.end(), sensor.begin(),
         [](float it) { return (it > LIDAR_MAX_RANGE) ? LIDAR_MAX_RANGE : it; });
 
-    for (size_t i = 0; i < LIDAR_SAMPLES; i++) {
+    /*for (size_t i = 0; i < LIDAR_SAMPLES; i++) {
         lidar_diff_[i] = sensor[i] - buffer_lidar_[i];
         
         if(lidar_diff_[i] > 10)
         {
             indice = i;
         }
+    }*/
+
+    int max_number = 0, indice_max_number = 0;
+    // max_number é o maior valor do vetor lidar_diff_ e indice_max_number é o indice do maior valor
+    // representando a posição em m e quantos graus está
+
+    for (size_t i = 0; i < LIDAR_SAMPLES; i++){
+        lidar_diff_[i] = abs(lidar_diff_[i]);
+        if(lidar_diff_[i] > max_number){
+            max_number = lidar_diff_[i];
+            indice_max_number = i;
+        }
     }
+
+    int x = max_number * cos(indice_max_number * M_PI / 180);
+    int y = max_number * sin(indice_max_number * M_PI / 180);
+
     //copy sensor to buffer
       if (!is_in_motion && save_sensor_buffer)
       {
@@ -86,11 +101,11 @@ public:
     //
     // your code here
     //
-    if(indice >= 0 && indice < LIDAR_SAMPLES) 
-    {
-        masterPose_.x = lidar_diff_[indice] * cos(indice);
-        masterPose_.y = lidar_diff_[indice] * sin(indice);
-    }
+   /* masterPose_.x = lidar_diff_[indice] * cos(indice);
+    masterPose_.y = lidar_diff_[indice] * sin(indice);
+    */
+    masterPose_.x = x;
+    masterPose_.y = y;
 
 #ifdef USE_MATPLOT
     std::vector<double> theta = linspace(0, 2 * pi, LIDAR_SAMPLES);
@@ -118,7 +133,6 @@ public:
     m.getRPY(roll, pitch, yaw);
 
     pose2d.theta = yaw;
-    follower_t = pose2d.theta;
 
     ROS_INFO("[Follower] x: %.2lf, y: %.2lf, theta: %.2lf", pose2d.x, pose2d.y,
              pose2d.theta);
@@ -157,14 +171,14 @@ public:
     // angular
     theta_r = atan2((masterPose_.y - followerPose_.y),
                     (masterPose_.x - followerPose_.x));
-    omega_t = k_pa * (theta_r - follower_t);
+    omega_t = k_pa * (theta_r - followerPose_.theta);
 
-    if (abs(omega_t) > maxAngVel) {
+    /*if (abs(omega_t) > maxAngVel) {
       if (omega_t < 0)
         omega_t = -maxAngVel;
       else
         omega_t = maxAngVel;
-    }
+    }*/
 
     command.angular.z = omega_t;
 
@@ -180,12 +194,15 @@ public:
 int main(int argc, char **argv) {
   ros::init(argc, argv, "tb3_follow_node");
   ros::NodeHandle nh;
-  Follow follow(nh);
+  Follow follower(nh);
   ros::Rate loop_rate(0.5);
 
   while (ros::ok()) 
   {
     ros::spinOnce();
+    follower.moveToTarget();
+    loop_rate.sleep();
+
   }
   return 0;
 }
